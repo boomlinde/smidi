@@ -12,7 +12,7 @@ msglen(enum status status)
 	case MIDI_CONTROL_CHANGE: return 2;
     case MIDI_PROGRAM_CHANGE: return 1;
 	case MIDI_CHANNEL_AFTERTOUCH: return 1;
-    case MIDI_WHEEL_RANGE: return 2;
+    case MIDI_BEND_CHANGE: return 2;
 	case MIDI_SYSEX: return 1;
     case MIDI_SONG_POSITION: return 2;
 	case MIDI_SONG_SELECT: return 1;
