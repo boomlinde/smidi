@@ -1,5 +1,4 @@
 #include <errno.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -9,8 +8,8 @@ int
 main(void)
 {
 	int fd;
-	uint8_t b;
-	smidi_t m = {0};
+	unsigned char b;
+	static struct smidi m;
 
 	fd = fileno(stdin);
 

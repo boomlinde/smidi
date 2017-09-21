@@ -1,21 +1,27 @@
 #include <stdbool.h>
-#include <stdint.h>
 
 #include "smidi.h"
 
-static const int msglen[256] =
-    {[MIDI_NOTE_OFF] = 2,        [MIDI_NOTE_ON] = 2,
-     [MIDI_POLY_AFTERTOUCH] = 2, [MIDI_CONTROL_CHANGE] = 2,
-     [MIDI_PROGRAM_CHANGE] = 1,  [MIDI_CHANNEL_AFTERTOUCH] = 1,
-     [MIDI_WHEEL_RANGE] = 2,     [MIDI_SYSEX] = 1,
-     [MIDI_SONG_POSITION] = 2,   [MIDI_SONG_SELECT] = 1,
-     [MIDI_TUNE_REQUEST] = 0,    [MIDI_EOX] = 0,
-     [MIDI_TIMING_CLOCK] = 0,    [MIDI_START] = 0,
-     [MIDI_CONTINUE] = 0,        [MIDI_STOP] = 0,
-     [MIDI_ACTIVE_SENSING] = 0,  [MIDI_RESET] = 0};
+static int
+msglen(enum status status)
+{
+	switch (status) {
+    case MIDI_NOTE_OFF: return 2;
+	case MIDI_NOTE_ON: return 2;
+    case MIDI_POLY_AFTERTOUCH: return 2;
+	case MIDI_CONTROL_CHANGE: return 2;
+    case MIDI_PROGRAM_CHANGE: return 1;
+	case MIDI_CHANNEL_AFTERTOUCH: return 1;
+    case MIDI_WHEEL_RANGE: return 2;
+	case MIDI_SYSEX: return 1;
+    case MIDI_SONG_POSITION: return 2;
+	case MIDI_SONG_SELECT: return 1;
+	default: return 0;
+	}
+}
 
-bool
-smidi_next(smidi_t *msg, uint8_t b)
+int
+smidi_next(struct smidi *msg, unsigned char b)
 {
 	if (b >= 0xf8) {
 		msg->event = b;
@@ -32,10 +38,10 @@ smidi_next(smidi_t *msg, uint8_t b)
 		msg->len++;
 	}
 
-	if (msg->status && msg->len >= msglen[msg->status]) {
+	if (msg->status && msg->len >= msglen(msg->status)) {
 		msg->event = msg->status;
 		msg->len = 0;
-		return true;
+		return 1;
 	}
-	return false;
+	return 0;
 }

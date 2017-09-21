@@ -1,21 +1,8 @@
 #ifndef _SMIDI_H_
 #define _SMIDI_H_
 
-#include <stdbool.h>
-#include <stdint.h>
-
-/* MIDI event and parser state representation */
-typedef struct {
-	uint8_t channel;
-	uint8_t event;
-	uint8_t data[2];
-
-	uint8_t len;
-	uint8_t status;
-} smidi_t;
-
 /* MIDI status and real-time message bytes */
-enum {
+enum status {
 	MIDI_NOTE_OFF = 0x80,
 	MIDI_NOTE_ON = 0x90,
 	MIDI_POLY_AFTERTOUCH = 0xa0,
@@ -36,7 +23,17 @@ enum {
 	MIDI_RESET = 0xff
 };
 
+/* MIDI event and parser state representation */
+struct smidi {
+	unsigned char channel;
+	unsigned char event;
+	unsigned char data[2];
+
+	unsigned char len;
+	enum status status;
+};
+
 /* Consume a byte and emit a MIDI event at msg if returning true */
-bool smidi_next(smidi_t *msg, uint8_t b);
+int smidi_next(struct smidi *msg, unsigned char b);
 
 #endif /* _SMIDI_H_ */
