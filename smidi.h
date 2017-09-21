@@ -1,6 +1,9 @@
 #ifndef _SMIDI_H_
 #define _SMIDI_H_
 
+/* Given a data array, gives a signed 14-bit value of both bytes combined */
+#define SMIDI_S14(data) ((int)((data)[0]) | ((int)((data)[1]) << 7))
+
 /* MIDI status and real-time message bytes */
 enum status {
 	MIDI_NOTE_OFF = 0x80,
