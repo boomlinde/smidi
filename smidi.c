@@ -1,20 +1,18 @@
-#include <stdbool.h>
-
 #include "smidi.h"
 
 static int
 msglen(enum status status)
 {
 	switch (status) {
-    case MIDI_NOTE_OFF: return 2;
+	case MIDI_NOTE_OFF: return 2;
 	case MIDI_NOTE_ON: return 2;
-    case MIDI_POLY_AFTERTOUCH: return 2;
+	case MIDI_POLY_AFTERTOUCH: return 2;
 	case MIDI_CONTROL_CHANGE: return 2;
-    case MIDI_PROGRAM_CHANGE: return 1;
+	case MIDI_PROGRAM_CHANGE: return 1;
 	case MIDI_CHANNEL_AFTERTOUCH: return 1;
-    case MIDI_BEND_CHANGE: return 2;
+	case MIDI_BEND_CHANGE: return 2;
 	case MIDI_SYSEX: return 1;
-    case MIDI_SONG_POSITION: return 2;
+	case MIDI_SONG_POSITION: return 2;
 	case MIDI_SONG_SELECT: return 1;
 	default: return 0;
 	}
@@ -25,7 +23,7 @@ smidi_next(struct smidi *msg, unsigned char b)
 {
 	if (b >= 0xf8) {
 		msg->event = b;
-		return true;
+		return 1;
 	} else if (b >= 0xf0) {
 		msg->status = b;
 		msg->len = 0;
